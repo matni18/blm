@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Bayesian linear regresssion
 
+Sales pitch for package, plots and stuff, demonstration.
 
 
 
