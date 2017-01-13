@@ -4,17 +4,22 @@
 \alias{blm}
 \title{Bayesian linear model.}
 \usage{
-blm(model, alpha, beta, data, ...)
+blm(model, prior, beta, ...)
 }
 \arguments{
 \item{model}{A formula describing the model.}
 
-\item{...}{Additional data, for example a data frame. Feel free to add other options.}
+\item{prior}{A prior distribution in the form of a covariance matrix}
+
+\item{beta}{Beta, the precision}
+
+\item{...}{Additional data, for example a data frame.}
 }
 \value{
-A fitted model.
+A list of descriptive parameters of the prior and posterior distributions
 }
 \description{
-Fits a model, given as a formula, optionally with data provided through the "..." parameter.
+Constructor for class 'blm'.
+Calculates a posterior distribution of weights, given a model.
 }
 

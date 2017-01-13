@@ -8,6 +8,11 @@ Description: Package for fitting Bayesian linear models.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
+Imports:
+    MASS,
+    graphics,
+    stats,
+    devtools
 Suggests:
     knitr,
     rmarkdown,

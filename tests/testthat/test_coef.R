@@ -1,6 +1,6 @@
-context("blm constructor")
+context("coef")
 
-test_that("We can construct a blm object", {
+test_that("We can get the coefficients", {
   #Simulate data:
   beta = 0.2
   w0 = 0.2; w1 = 1.2; w2 = 0.5
@@ -11,15 +11,20 @@ test_that("We can construct a blm object", {
 
   #Construct a blm:
   myBlm=blm(m, make_prior(m, 1), beta, d)
+  #Get coefficients:
+  myCoefs = coef(myBlm)
   #TESTS:
   #No values should be NULL in the output list:
-  expect_true(all(!sapply(myBlm, is.null)))
+  expect_true(all(!sapply(myCoefs, is.null)))
   #Check that the covariance matrix has the right dimensions:
-  expect_true(all(dim(myBlm$sigma)==3))
+  expect_true(all(dim(myCoefs$sigma)==3))
   #Check that the mean has the right dimensions:
-  expect_true(all(dim(myBlm$mean)==c(3,1)))
+  expect_true(all(dim(myCoefs$mean)==c(3,1)))
   #Check that the class is correct:
-  expect_true(class(myBlm)=='blm')
-  #Check that we get an error if we try to input a negative value of beta:
-  expect_error(blm(m, make_prior(m, 1), -0.2, d))
+  expect_true(class(myCoefs)=='list')
+
+  #Construct a bad blm:
+  myBlm$beta = NULL
+  #Try to get coef of bad blm:
+  expect_error(coef(myBlm))
 })
