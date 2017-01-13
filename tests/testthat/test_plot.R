@@ -9,8 +9,10 @@ test_that("We can plot the blm", {
   #The model:
   m = y ~ x+z
 
-  #Construct a bad blm:
+  #Construct blm:
   myBlm=blm(m, make_prior(m, 1), beta, d)
+  expect_error(plot(myBlm), NA)
+  #Construct a bad blm:
   myBlm$beta = NULL
   #Try to plot bad blm:
   expect_error(plot(myBlm))
