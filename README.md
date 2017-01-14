@@ -3,17 +3,9 @@ Bayesian Linear Regresssion
 
 This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data.
 
-The definition of a linear model is any model that takes on the form
+The definition of a linear model is any model that takes on the form $Y = w\_0 +\\sum\_{i=1}^n w\_i\\cdot f(x\_i)$, for random variables *x*<sub>*i*</sub> ∈ \[1; *n*\] where *w*<sub>*i*</sub> respresents the weight associated with the term *f*(*x*<sub>*i*</sub>). In general, the function *f*(*x*<sub>*i*</sub>) can be any function, but this package only deals with cases where *f*(*x*<sub>*i*</sub>) is a linear function.
 
-$$Y = w\_0 +\\sum\_{i=1}^n w\_i\\cdot f(x\_i),$$
-
-for random variables *x*<sub>*i*</sub> ∈ \[1; *n*\] where *w*<sub>*i*</sub> respresents the weight associated with the term *f*(*x*<sub>*i*</sub>). In general, the function *f*(*x*<sub>*i*</sub>) can be any function, but this package only deals with cases where *f*(*x*<sub>*i*</sub>) is a linear function.
-
-The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, *α*. This will output a covariance matrix of the form
-
-$$\\sigma\_{ij} = \\begin{cases} 1/\\alpha,&\\text{if i=j}\\\\0&\\text{otherwise}\\end{cases}$$
-
-and a mean of 0 for all *w*<sub>*i*</sub>.
+The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, *α*. This will output a covariance matrix of the form $\\sigma\_{ij} = \\begin{cases} 1/\\alpha,&\\text{if i=j}\\\\0&\\text{otherwise}\\end{cases}$, and a mean of 0 for all *w*<sub>*i*</sub>.
 
 Given a model, a prior distribution, a posterior precision *β*, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with *w*<sub>*i*</sub> ∼ *N*(*m*<sub>*x*, *y*</sub>, *σ*<sub>*x*, *y*</sub>) where
 
