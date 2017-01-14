@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{plot.blm}
 \alias{plot.blm}
-\title{Plot of Bayesian linear model.}
+\title{Plot Bayesian Linear Model}
 \usage{
 \method{plot}{blm}(x, ...)
 }

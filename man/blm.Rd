@@ -2,16 +2,16 @@
 % Please edit documentation in R/blm.R
 \name{blm}
 \alias{blm}
-\title{Bayesian linear model.}
+\title{Bayesian Linear Model}
 \usage{
 blm(model, prior, beta, ...)
 }
 \arguments{
 \item{model}{A formula describing the model.}
 
-\item{prior}{A prior distribution in the form of a covariance matrix}
+\item{prior}{A prior distribution in the form of a list, containing at least a covariance matrix named sigma}
 
-\item{beta}{Beta, the precision}
+\item{beta}{The precision, a number}
 
 \item{...}{Additional data, for example a data frame.}
 }

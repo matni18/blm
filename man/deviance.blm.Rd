@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{deviance.blm}
 \alias{deviance.blm}
-\title{Deviance of Bayesian linear model.}
+\title{Deviance of Bayesian Linear Model Fit}
 \usage{
 \method{deviance}{blm}(object, ...)
 }

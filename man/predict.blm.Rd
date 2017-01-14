@@ -2,19 +2,19 @@
 % Please edit documentation in R/modelMethods.R
 \name{predict.blm}
 \alias{predict.blm}
-\title{Predict response.}
+\title{Predict Response from Bayesian Linear Model Fit}
 \usage{
-\method{predict}{blm}(object, newdata, ...)
+\method{predict}{blm}(object, newdata = NULL, ...)
 }
 \arguments{
 \item{object}{An object of class 'blm'}
 
-\item{newdata}{A data frame containing data different from that used to build the blm}
+\item{newdata}{A data frame containing data different from that used to build the blm. If not specified, fitted.blm() will be called. If newdata contains a response variable, this will be used to update the blm before fitting. default = NULL.}
 
 \item{...}{Not used}
 }
 \value{
-see fitted().
+see fitted.blm().
 }
 \description{
 Predict response of new data based on existing Bayesian linear model. It uses the old posterior distribution as a new prior distibution and then fits the new data by calling fitted().

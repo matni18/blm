@@ -2,7 +2,7 @@
 % Please edit documentation in R/supportMethods.R
 \name{responselessModelMatrix}
 \alias{responselessModelMatrix}
-\title{Responseless model matrix}
+\title{Responseless Model Matrix}
 \usage{
 responselessModelMatrix(model, dataframe)
 }

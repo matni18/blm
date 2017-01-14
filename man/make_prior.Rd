@@ -9,7 +9,7 @@ make_prior(model, alpha)
 \arguments{
 \item{model}{A formula describing the model.}
 
-\item{alpha}{Precision}
+\item{alpha}{The Precision}
 }
 \value{
 A list of the mean (always 0 for all parameters) and the covariance for the prior distribution.

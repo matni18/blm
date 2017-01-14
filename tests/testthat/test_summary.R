@@ -17,4 +17,11 @@ test_that("We can print a summary of the blm", {
   #Check that the output has the right length:
   expect_true(length(mySummary)==23)
 
+  #Check with larger dataset:
+  d = data.frame(x=rnorm(20), z=rnorm(20))
+  d$y = rnorm(20, w0+w1*d$x+w2*d$z, 1/beta)
+  myBlm2 = blm(m, make_prior(m, 1), beta, d)
+  mySummary2 = capture.output(summary(myBlm2))
+  #Check that the output has the right length:
+  expect_true(length(mySummary2)==23)
 })

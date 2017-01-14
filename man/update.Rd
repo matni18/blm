@@ -9,9 +9,9 @@ update(model, prior, beta, ...)
 \arguments{
 \item{model}{A formula describing the model.}
 
-\item{prior}{A prior distribution, must have at least a covariance matrix named sigma}
+\item{prior}{A prior distribution, must be a list and have at least a covariance matrix named sigma}
 
-\item{beta}{The precision}
+\item{beta}{The precision, a number}
 
 \item{...}{Additional data, for example a data frame.}
 }

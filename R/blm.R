@@ -5,7 +5,7 @@
 #'
 #'
 #' @param model      A formula describing the model.
-#' @param alpha      Precision
+#' @param alpha      The Precision
 #'
 #' @return           A list of the mean (always 0 for all parameters) and the covariance for the prior distribution.
 #' @export
@@ -16,14 +16,14 @@ make_prior = function(model, alpha) {
 }
 
 
-#' Bayesian linear model.
+#' Bayesian Linear Model
 #'
 #' Constructor for class 'blm'.
 #' Calculates a posterior distribution of weights, given a model.
 #'
 #' @param model   A formula describing the model.
-#' @param prior   A prior distribution in the form of a covariance matrix
-#' @param beta    Beta, the precision
+#' @param prior   A prior distribution in the form of a list, containing at least a covariance matrix named sigma
+#' @param beta    The precision, a number
 #' @param ...     Additional data, for example a data frame.
 #'
 #' @return A list of descriptive parameters of the prior and posterior distributions

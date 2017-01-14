@@ -22,6 +22,16 @@ test_that("We can predict the response of new data", {
   expect_true(all(dim(myPred)==c(5,2)))
   #Check that the class is correct:
   expect_true(class(myPred)=='data.frame')
+  #Check that we enter the right version of predict:
+  expect_output(predict(myBlm, d2), "newdata contains a response variable. Using new data to improve model fit:")
+
+  #new data without response variable:
+  #Check that we enter the right version of predict:
+  expect_output(predict(myBlm, d2[,c("x", "z")]), "Predicting response variable based on newdata:")
+
+  #no newdata:
+  #Check that we enter the right version of predict:
+  expect_output(predict(myBlm), "newdata argument not specified, old data will be fitted:")
 
   #Construct a bad blm:
   myBlm$beta = NULL

@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{confint.blm}
 \alias{confint.blm}
-\title{Confidence interval for Bayesian linear model.}
+\title{Confidence Interval for Bayesian Linear Model Weights}
 \usage{
 \method{confint}{blm}(object, parm, level = 0.95, ...)
 }

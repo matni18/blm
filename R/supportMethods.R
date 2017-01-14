@@ -1,4 +1,4 @@
-#' Responseless model matrix
+#' Responseless Model Matrix
 #'
 #' Builds a model matrix from data, excluding the response variable.
 #' Support function for update() to build the phiX matrix.
@@ -21,8 +21,8 @@ responselessModelMatrix = function(model, dataframe){
 #' Support method for class 'blm'
 #'
 #' @param model   A formula describing the model.
-#' @param prior   A prior distribution, must have at least a covariance matrix named sigma
-#' @param beta    The precision
+#' @param prior   A prior distribution, must be a list and have at least a covariance matrix named sigma
+#' @param beta    The precision, a number
 #' @param ...     Additional data, for example a data frame.
 #'
 #' @return        A list contating the mean and the covariance matrix for the posterior distribution as well as the original data packed into a data frame.

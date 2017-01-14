@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{residuals.blm}
 \alias{residuals.blm}
-\title{Calculate residuals}
+\title{Residuals from Bayesian Linear Model Fit}
 \usage{
 \method{residuals}{blm}(object, ...)
 }

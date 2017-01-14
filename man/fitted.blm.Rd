@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{fitted.blm}
 \alias{fitted.blm}
-\title{Fitting a Bayesian linear model.}
+\title{Fitting a Bayesian Linear Model}
 \usage{
 \method{fitted}{blm}(object, ...)
 }

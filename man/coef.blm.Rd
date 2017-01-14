@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{coef.blm}
 \alias{coef.blm}
-\title{Coefficients of Bayesian linear model.}
+\title{Coefficients of Bayesian Linear Model}
 \usage{
 \method{coef}{blm}(object, ...)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{summary.blm}
 \alias{summary.blm}
-\title{Summary of Bayesian linear model.}
+\title{Summary of Bayesian Linear Model}
 \usage{
 \method{summary}{blm}(object, ...)
 }

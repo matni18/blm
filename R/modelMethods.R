@@ -1,4 +1,4 @@
-#' Coefficients of Bayesian linear model.
+#' Coefficients of Bayesian Linear Model
 #'
 #' Reports the mean and covariance of the weights of a Bayesian linear model.
 #'
@@ -14,7 +14,7 @@ coef.blm = function(object,...){
   else return(list(mean=object$mean, sigma=object$sigma))
 }
 
-#' Confidence interval for Bayesian linear model.
+#' Confidence Interval for Bayesian Linear Model Weights
 #'
 #' Calculates the confidence interval of the weights
 #'
@@ -44,7 +44,7 @@ confint.blm = function(object, parm, level = 0.95,...){
   }
 }
 
-#' Deviance of Bayesian linear model.
+#' Deviance of Bayesian Linear Model Fit
 #'
 #' Reports the sum of squared residuals from a Bayesian linear model fit.
 #'
@@ -60,7 +60,7 @@ deviance.blm = function(object,...){
   else return(sum((residuals(object))^2))
 }
 
-#' Fitting a Bayesian linear model.
+#' Fitting a Bayesian Linear Model
 #'
 #' Predicts response variable values from the data used to fit a Bayesian linear model.
 #'
@@ -89,7 +89,7 @@ fitted.blm <- function(object,...) {
   }
 }
 
-#' Plot of Bayesian linear model.
+#' Plot Bayesian Linear Model
 #'
 #' Plots the residuals vs the fitted values.
 #'
@@ -113,27 +113,49 @@ plot.blm = function(x,...){
   }
 }
 
-#' Predict response.
+#' Predict Response from Bayesian Linear Model Fit
 #'
 #' Predict response of new data based on existing Bayesian linear model. It uses the old posterior distribution as a new prior distibution and then fits the new data by calling fitted().
 #'
 #' @param object   An object of class 'blm'
-#' @param newdata A data frame containing data different from that used to build the blm
+#' @param newdata A data frame containing data different from that used to build the blm. If not specified, fitted.blm() will be called. If newdata contains a response variable, this will be used to update the blm before fitting. default = NULL.
 #' @param ... Not used
 #'
-#' @return see fitted().
+#' @return see fitted.blm().
 #' @import stats
 #' @export
 
-predict.blm = function(object, newdata, ...){
+predict.blm = function(object, newdata = NULL, ...){
   if (all(!sapply(object[1:8], is.null)) == F) stop("'blm' object contains NULL values")
-  else{
+  else if (is.null(newdata)){
+    #If no new data is given, call fitted():
+    cat("newdata argument not specified, old data will be fitted:")
+    return(fitted(object))
+
+  } else if (length(all.vars(object$model))==ncol(newdata)+1){
+    #If newdata does not contain repsponse variable, predict this:
+    cat("Predicting response variable based on newdata:")
+    phiX = responselessModelMatrix(object$model, newdata)
+    mxy = object$mean
+    Sxy = object$sigma
+
+    prediction=as.data.frame(matrix(nrow=nrow(phiX), ncol=0))
+
+    for (i in 1:nrow(prediction)){
+      prediction[i,"Prediction"] = t(mxy)%*%phiX[i,]
+      prediction[i,"Variance"] = 1/object$beta + (t(phiX[i,]) %*% Sxy %*% phiX[i,])
+    }
+    return(prediction)
+
+  } else if (length(all.vars(object$model))==ncol(newdata)){
+    # If newdata contains a response variable, use newdata to improve the blm:
+    cat("newdata contains a response variable. Using new data to improve model fit:")
     newBlm = blm(object$model, object$posterior, object$beta, newdata)
     return(fitted(newBlm))
   }
 }
 
-#' Print a Bayesian linear model.
+#' Print a Bayesian Linear Model.
 #'
 #' Prints the function call that was made to fit the model as well as the coefficients (mean and covariance).
 #'
@@ -153,7 +175,7 @@ print.blm = function(x,...){
 }
 
 
-#' Calculate residuals
+#' Residuals from Bayesian Linear Model Fit
 #'
 #' Calculates the difference between observed and predicted data.
 #'
@@ -175,7 +197,7 @@ residuals.blm = function(object, ...){
 }
 
 
-#' Summary of Bayesian linear model.
+#' Summary of Bayesian Linear Model
 #'
 #' Prints summary statistics for a blm fit: Residuals, Deviance.
 #'
@@ -190,7 +212,10 @@ summary.blm = function(object,...){
   writeLines("\nResiduals:")
   residual = t(residuals(object))
   colnames(residual)=1:ncol(residual)
-  print(residual)
+  if (ncol(residual)>10){
+    cat(residual[1:10], "...\n(Showing first 10 residuals)\n")
+  }
+  else print(residual)
   writeLines("\nDeviance:")
   print(deviance(object))
 }

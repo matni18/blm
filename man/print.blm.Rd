@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelMethods.R
 \name{print.blm}
 \alias{print.blm}
-\title{Print a Bayesian linear model.}
+\title{Print a Bayesian Linear Model.}
 \usage{
 \method{print}{blm}(x, ...)
 }

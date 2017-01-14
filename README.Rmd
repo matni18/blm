@@ -1,5 +1,5 @@
 ---
-title: "Bayesian linear regression"
+title: "Bayesian Linear Regression"
 author: "Matilde Nielsen"
 date: "`r Sys.Date()`"
 output:
@@ -9,12 +9,56 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(blm)
+library(MASS)
 ```
 
-## Bayesian linear regresssion
+## Bayesian Linear Regresssion
 
-Sales pitch for package, plots and stuff, demonstration.
+This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data.
+The definition of a linear model is any model that takes on the form,
+$$Y = w_0 +\sum_{i=1}^n w_i\cdot f(x_i), $$
+for random variables $x_i \in [1;n]$ where $w_i$ respresents the weight associated with the term $f(x_i)$. In general, the function $f(x_i)$ can be any function, but this package only deals with cases where $f(x_i)$ is a linear function.
+The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, $\alpha$. This will output a covariance matrix of the form, $$\sigma_{ij} = \begin{cases} 1/\alpha,&\text{if i=j}\\0&\text{otherwise}\end{cases}$$
+and a mean of 0 for all $w_i$.
+Given a model, a prior distribution, a posterior precision $\beta$, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with $w_i \sim N(m_{x,y},\sigma_{x,y})$ where $$\mathbf{m}_{x,y}=\beta \:\mathbf{S}_{x,y} {\phi_X}^T \mathbf{y},$$
+$$\sigma_{x,y}^{-1}=\alpha I + \beta\:{\phi_X}^T\phi_X$$
+$\phi_X$ is the model matrix where the first column has $1$ in every row and each explanatory variable has it's own column.
+Below is shown the results for a simulated data set as well as a prediction for a new data set.
+```{r simulateTraining}
+#Simulate training data:
+set.seed(1)
+beta = 0.2; alpha = 1
+w0 = 0.2; w1 = 1.2; w2 = 0.5
+d = data.frame(x=rnorm(500), z=rnorm(500))
+d$y = rnorm(500, w0+w1*d$x+w2*d$z, 1/beta)
+head(d)
+```
+```{r myBlm}
+#The model:
+m = y ~ x+z
 
+#The prior:
+myPrior = make_prior(m, alpha)
+
+#The bayesian linear model:
+myBlm = blm(m, myPrior, beta, d)
+
+#Predictions based on the training data:
+myFit = fitted(myBlm)
+head(myFit)
+
+summary(myBlm)
+
+#New data:
+set.seed(2)
+d2 = data.frame(x=rnorm(5), z=rnorm(5))
+d2
+
+#Predict response variables for new data using the blm:
+predict(myBlm, d2)
+
+```
 
 
 
