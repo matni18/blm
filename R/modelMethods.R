@@ -91,13 +91,14 @@ fitted.blm <- function(object,...) {
 
 #' Plot Bayesian Linear Model
 #'
-#' Plots the residuals vs the fitted values.
+#' Plots the residuals vs the fitted values as well as a Q-Q plot of the residuals.
 #'
 #' @param x   An object of class 'blm'
 #' @param ... Not used
 #'
 #' @return      A plot of residuals vs fitted values.
 #' @import graphics
+#' @import stats
 #' @export
 
 plot.blm = function(x,...){
@@ -105,11 +106,27 @@ plot.blm = function(x,...){
   else{
     d = data.frame(Pred = fitted(x)$Prediction, Res = residuals(x), Number = 1:nrow(residuals(x)))
     d = d[order(d$Pred),]
-    plot(d$Pred, d$Res, type="l", col="red",
+    plot(d$Pred, d$Res, type="p",
          main="Residuals vs. Fitted",
          xlab="Fitted response",
          ylab="Residuals")
-    text(d$Pred, d$Res, d$Number)
+    #Add a linear regression line:
+    linReg = lm(d$Res ~ d$Pred, d)
+    abline(a = linReg$coefficients[1], b=linReg$coefficients[2], col="red")
+    #Add dashed line at 0:
+    abline(a = 0, b = 0, lty = 2 , col="grey")
+
+    #Add labels to points (if more than 10 points, only label outliers)
+    if (nrow(d)<10){
+      text(d$Pred, d$Res, paste("        ", d$Number), cex=0.7)
+    } else{
+      maxRes = max(d$Res)
+      minRes = min(d$Res)
+      outliers = d[d$Res < 0.7*minRes | d$Res > 0.7*maxRes,]
+      text(outliers$Pred, outliers$Res, paste("        ", outliers$Number), cex=0.7)
+    }
+    #Make q-q plot:
+    qqnorm(d$Res, main="Normal Q-Q Plot of residuals")
   }
 }
 

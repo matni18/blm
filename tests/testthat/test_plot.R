@@ -12,8 +12,16 @@ test_that("We can plot the blm", {
   #Construct blm:
   myBlm=blm(m, make_prior(m, 1), beta, d)
   expect_error(plot(myBlm), NA)
+
+  #Try with larger dataset:
+  d = data.frame(x=rnorm(50), z=rnorm(50))
+  d$y = rnorm(50, w0+w1*d$x+w2*d$z, 1/beta)
+  myBlm=blm(m, make_prior(m, 1), beta, d)
+  expect_error(plot(myBlm), NA)
+
   #Construct a bad blm:
   myBlm$beta = NULL
+
   #Try to plot bad blm:
   expect_error(plot(myBlm))
 })

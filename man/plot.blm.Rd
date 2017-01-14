@@ -15,6 +15,6 @@
 A plot of residuals vs fitted values.
 }
 \description{
-Plots the residuals vs the fitted values.
+Plots the residuals vs the fitted values as well as a Q-Q plot of the residuals.
 }
 
