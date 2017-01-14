@@ -13,10 +13,9 @@ for random variables *x*<sub>*i*</sub> ∈ \[1; *n*\] where *w*<sub>*i*</s
 
 The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, *α*. This will output a covariance matrix of the form,
 
-$$
-\\sigma\_{ij} = \\begin{cases} 1/\\alpha,&\\text{if i=j}\\\\0&\\text{otherwise}\\end{cases}
-$$
-
+\begin{equation}
+\sigma_{ij} = \begin{cases} 1/\alpha,&\text{if i=j}\\0&\text{otherwise}\end{cases}
+\end{equation}
 and a mean of 0 for all *w*<sub>*i*</sub>.
 
 Given a model, a prior distribution, a posterior precision *β*, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with *w*<sub>*i*</sub> ∼ *N*(*m*<sub>*x*, *y*</sub>, *σ*<sub>*x*, *y*</sub>) where
