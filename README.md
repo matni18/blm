@@ -1,14 +1,31 @@
 Bayesian Linear Regresssion
 ---------------------------
 
-This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data. The definition of a linear model is any model that takes on the form,
-$$Y = w\_0 +\\sum\_{i=1}^n w\_i\\cdot f(x\_i), $$
- for random variables *x*<sub>*i*</sub> ∈ \[1; *n*\] where *w*<sub>*i*</sub> respresents the weight associated with the term *f*(*x*<sub>*i*</sub>). In general, the function *f*(*x*<sub>*i*</sub>) can be any function, but this package only deals with cases where *f*(*x*<sub>*i*</sub>) is a linear function. The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, *α*. This will output a covariance matrix of the form,
-$$\\sigma\_{ij} = \\begin{cases} 1/\\alpha,&\\text{if i=j}\\\\0&\\text{otherwise}\\end{cases}$$
- and a mean of 0 for all *w*<sub>*i*</sub>. Given a model, a prior distribution, a posterior precision *β*, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with *w*<sub>*i*</sub> ∼ *N*(*m*<sub>*x*, *y*</sub>, *σ*<sub>*x*, *y*</sub>) where
+This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data.
+
+The definition of a linear model is any model that takes on the form,
+
+$$
+Y = w\_0 +\\sum\_{i=1}^n w\_i\\cdot f(x\_i), 
+$$
+
+for random variables *x*<sub>*i*</sub> ∈ \[1; *n*\] where *w*<sub>*i*</sub> respresents the weight associated with the term *f*(*x*<sub>*i*</sub>). In general, the function *f*(*x*<sub>*i*</sub>) can be any function, but this package only deals with cases where *f*(*x*<sub>*i*</sub>) is a linear function.
+
+The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, *α*. This will output a covariance matrix of the form,
+
+$$
+\\sigma\_{ij} = \\begin{cases} 1/\\alpha,&\\text{if i=j}\\\\0&\\text{otherwise}\\end{cases}
+$$
+
+and a mean of 0 for all *w*<sub>*i*</sub>.
+
+Given a model, a prior distribution, a posterior precision *β*, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with *w*<sub>*i*</sub> ∼ *N*(*m*<sub>*x*, *y*</sub>, *σ*<sub>*x*, *y*</sub>) where
+
 **m**<sub>*x*, *y*</sub> = *β* **S**<sub>*x*, *y*</sub>*ϕ*<sub>*X*</sub><sup>*T*</sup>**y**,
+
 *σ*<sub>*x*, *y*</sub><sup>−1</sup> = *α**I* + *β* *ϕ*<sub>*X*</sub><sup>*T*</sup>*ϕ*<sub>*X*</sub>
- *ϕ*<sub>*X*</sub> is the model matrix where the first column has 1 in every row and each explanatory variable has it's own column. Below is shown the results for a simulated data set as well as a prediction for a new data set.
+
+*ϕ*<sub>*X*</sub> is the model matrix where the first column has 1 in every row and each explanatory variable has it's own column. Below is shown the results for a simulated data set.
 
 ``` r
 #Simulate training data:
@@ -80,6 +97,12 @@ summary(myBlm)
     ## [1] 12628.61
 
 ``` r
+plot(myBlm)
+```
+
+![](README_files/figure-markdown_github/myBlm-1.png)![](README_files/figure-markdown_github/myBlm-2.png) Now, we can use the bayesian linear model to predict the response for new data:
+
+``` r
 #New data:
 set.seed(2)
 d2 = data.frame(x=rnorm(5), z=rnorm(5))
@@ -106,3 +129,12 @@ predict(myBlm, d2)
     ## 3  1.77845168 5.033792
     ## 4 -0.74943407 5.057691
     ## 5  0.06983522 5.010088
+
+We can compare these results with a regular linear model (using `lm` from package `stats`):
+
+``` r
+linReg = lm(m,d)
+plot(linReg, which=c(1,2))
+```
+
+![](README_files/figure-markdown_github/lm-1.png)![](README_files/figure-markdown_github/lm-2.png)
