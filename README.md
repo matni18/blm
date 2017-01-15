@@ -3,21 +3,17 @@ Bayesian Linear Regresssion
 
 This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data.
 
-The definition of a linear model is any model that takes on the form
-$$Y = w\_0+\\sum\_{i=1}^nw\_if(x\_i)$$
- for random variables *x*<sub>*i*</sub> ∈ \[1; *n*\] where *w*<sub>*i*</sub> respresents the weight associated with the term *f*(*x*<sub>*i*</sub>). In general, the function *f*(*x*<sub>*i*</sub>) can be any function, but this package only deals with cases where *f*(*x*<sub>*i*</sub>) is a linear function.
+The definition of a linear model is any model that takes on the form \[Y=w_0+\sum_{i=1}^nw_if(x_i)\] for random variables \(x_i \in [1;n]\) where \(w_i\) respresents the weight associated with the term \(f(x_i)\). In general, the function \(f(x_i)\) can be any function, but this package only deals with cases where \(f(x_i)\) is a linear function. It is also assumed that the data is normally distributed.
 
-The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, *α*. This will output a covariance matrix of the form
-$$\\sigma\_{ij} = \\begin{cases} 1/\\alpha,&\\text{if i=j}\\\\0,&\\text{otherwise}\\end{cases}$$
- and a mean of 0 for all *w*<sub>*i*</sub>.
+The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, \(\alpha\). This will output a covariance matrix of the form \[\sigma_{ij}=\begin{cases}1/\alpha,&\text{if i=j}\\0,&\text{otherwise}\end{cases}\] and a mean of 0 for all \(w_i\).
 
-Given a model, a prior distribution, a posterior precision *β*, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with *w*<sub>*i*</sub> ∼ *N*(*m*<sub>*x*, *y*</sub>, *σ*<sub>*x*, *y*</sub>) where
+Given a model, a prior distribution, a posterior precision \(\beta\), and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with \(w_i \sim N(m_{x,y},\sigma_{x,y})\) where
 
-**m**<sub>*x*, *y*</sub> = *β* **S**<sub>*x*, *y*</sub>*ϕ*<sub>*X*</sub><sup>*T*</sup>**y**,
+\[\mathbf{m}_{x,y}=\beta \:\mathbf{S}_{x,y} {\phi_X}^T \mathbf{y},\]
 
-*σ*<sub>*x*, *y*</sub><sup>−1</sup> = *α**I* + *β* *ϕ*<sub>*X*</sub><sup>*T*</sup>*ϕ*<sub>*X*</sub>
+\[\sigma_{x,y}^{-1}=\alpha I + \beta\:{\phi_X}^T\phi_X\]
 
-*ϕ*<sub>*X*</sub> is the model matrix where the first column has 1 in every row and each explanatory variable has it's own column. Below is shown the results for a simulated data set.
+\(\phi_X\) is the model matrix where the first column has \(1\) in every row and each explanatory variable has it's own column. Below is shown the results for a simulated data set.
 
 ``` r
 #Simulate training data:
@@ -92,7 +88,9 @@ summary(myBlm)
 plot(myBlm)
 ```
 
-![](README_files/figure-markdown_github/myBlm-1.png)![](README_files/figure-markdown_github/myBlm-2.png) Now, we can use the bayesian linear model to predict the response for new data:
+![](README_files/figure-markdown_github/myBlm-1.png)![](README_files/figure-markdown_github/myBlm-2.png)
+
+Now, we can use the bayesian linear model to predict the response for new data:
 
 ``` r
 #New data:

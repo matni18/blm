@@ -18,11 +18,11 @@ library(MASS)
 This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data.
 
 The definition of a linear model is any model that takes on the form 
-$$Y = w_0+\sum_{i=1}^nw_if(x_i)$$ 
-for random variables $x_i \in [1;n]$ where $w_i$ respresents the weight associated with the term $f(x_i)$. In general, the function $f(x_i)$ can be any function, but this package only deals with cases where $f(x_i)$ is a linear function.
+$$Y=w_0+\sum_{i=1}^nw_if(x_i)$$ 
+for random variables $x_i \in [1;n]$ where $w_i$ respresents the weight associated with the term $f(x_i)$. In general, the function $f(x_i)$ can be any function, but this package only deals with cases where $f(x_i)$ is a linear function. It is also assumed that the data is normally distributed.
 
 The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, $\alpha$. This will output a covariance matrix of the form 
-$$\sigma_{ij} = \begin{cases} 1/\alpha,&\text{if i=j}\\0,&\text{otherwise}\end{cases}$$
+$$\sigma_{ij}=\begin{cases}1/\alpha,&\text{if i=j}\\0,&\text{otherwise}\end{cases}$$
 and a mean of 0 for all $w_i$.
 
 Given a model, a prior distribution, a posterior precision $\beta$, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with $w_i \sim N(m_{x,y},\sigma_{x,y})$ where 
@@ -59,6 +59,7 @@ head(myFit)
 summary(myBlm)
 plot(myBlm)
 ```
+
 Now, we can use the bayesian linear model to predict the response for new data:
 ```{r newData}
 #New data:
