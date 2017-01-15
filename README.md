@@ -3,17 +3,25 @@ Bayesian Linear Regresssion
 
 This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data.
 
-The definition of a linear model is any model that takes on the form \[Y=w_0+\sum_{i=1}^nw_if(x_i)\] for random variables \(x_i \in [1;n]\) where \(w_i\) respresents the weight associated with the term \(f(x_i)\). In general, the function \(f(x_i)\) can be any function, but this package only deals with cases where \(f(x_i)\) is a linear function. It is also assumed that the data is normally distributed.
+The definition of a linear model is any model that takes on the form
 
-The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, \(\alpha\). This will output a covariance matrix of the form \[\sigma_{ij}=\begin{cases}1/\alpha,&\text{if i=j}\\0,&\text{otherwise}\end{cases}\] and a mean of 0 for all \(w_i\).
+![equation](http://www.sciweavers.org/tex2img.php?eq=Y%3Dw_0%2B%5Csum_%7Bi%3D1%7D%5Enw_if%28x_i%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
 
-Given a model, a prior distribution, a posterior precision \(\beta\), and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with \(w_i \sim N(m_{x,y},\sigma_{x,y})\) where
+for random variables *x*<sub>*i*</sub> ∈ \[1; *n*\] where *w*<sub>*i*</sub> respresents the weight associated with the term *f*(*x*<sub>*i*</sub>). In general, the function *f*(*x*<sub>*i*</sub>) can be any function, but this package only deals with cases where *f*(*x*<sub>*i*</sub>) is a linear function. It is also assumed that the data is normally distributed.
 
-\[\mathbf{m}_{x,y}=\beta \:\mathbf{S}_{x,y} {\phi_X}^T \mathbf{y},\]
+The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, *α*. This will output a covariance matrix of the form
 
-\[\sigma_{x,y}^{-1}=\alpha I + \beta\:{\phi_X}^T\phi_X\]
+![equation](http://www.sciweavers.org/tex2img.php?eq=%5Csigma_%7Bij%7D%3D%5Cbegin%7Bcases%7D1%2F%5Calpha%2C%26%5Ctext%7Bif%20i%3Dj%7D%5C%5C0%2C%26%5Ctext%7Botherwise%7D%5Cend%7Bcases%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
 
-\(\phi_X\) is the model matrix where the first column has \(1\) in every row and each explanatory variable has it's own column. Below is shown the results for a simulated data set.
+and a mean of 0 for all *w*<sub>*i*</sub>.
+
+Given a model, a prior distribution, a posterior precision *β*, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with *w*<sub>*i*</sub> ∼ *N*(*m*<sub>*x*, *y*</sub>, *σ*<sub>*x*, *y*</sub>) where
+
+**m**<sub>*x*, *y*</sub> = *β* **S**<sub>*x*, *y*</sub>*ϕ*<sub>*X*</sub><sup>*T*</sup>**y**,
+
+*σ*<sub>*x*, *y*</sub><sup>−1</sup> = *α**I* + *β* *ϕ*<sub>*X*</sub><sup>*T*</sup>*ϕ*<sub>*X*</sub>
+
+*ϕ*<sub>*X*</sub> is the model matrix where the first column has 1 in every row and each explanatory variable has it's own column. Below is shown the results for a simulated data set.
 
 ``` r
 #Simulate training data:
@@ -95,36 +103,117 @@ Now, we can use the bayesian linear model to predict the response for new data:
 ``` r
 #New data:
 set.seed(2)
-d2 = data.frame(x=rnorm(5), z=rnorm(5))
+d2 = data.frame(x=rnorm(20), z=rnorm(20))
 d2
 ```
 
-    ##             x          z
-    ## 1 -0.89691455  0.1324203
-    ## 2  0.18484918  0.7079547
-    ## 3  1.58784533 -0.2396980
-    ## 4 -1.13037567  1.9844739
-    ## 5 -0.08025176 -0.1387870
+    ##              x            z
+    ## 1  -0.89691455  2.090819205
+    ## 2   0.18484918 -1.199925820
+    ## 3   1.58784533  1.589638200
+    ## 4  -1.13037567  1.954651642
+    ## 5  -0.08025176  0.004937777
+    ## 6   0.13242028 -2.451706388
+    ## 7   0.70795473  0.477237303
+    ## 8  -0.23969802 -0.596558169
+    ## 9   1.98447394  0.792203270
+    ## 10 -0.13878701  0.289636710
+    ## 11  0.41765075  0.738938604
+    ## 12  0.98175278  0.318960401
+    ## 13 -0.39269536  1.076164354
+    ## 14 -1.03966898 -0.284157720
+    ## 15  1.78222896 -0.776675274
+    ## 16 -2.31106908 -0.595660499
+    ## 17  0.87860458 -1.725979779
+    ## 18  0.03580672 -0.902584480
+    ## 19  1.01282869 -0.559061915
+    ## 20  0.43226515 -0.246512567
 
 ``` r
 #Predict response variables for new data using the blm:
-predict(myBlm, d2)
+myPredict = predict(myBlm, d2)
 ```
 
     ## Predicting response variable based on newdata:
 
-    ##    Prediction Variance
-    ## 1 -0.73905836 5.018262
-    ## 2  0.44876068 5.015301
-    ## 3  1.77845168 5.033792
-    ## 4 -0.74943407 5.057691
-    ## 5  0.06983522 5.010088
-
 We can compare these results with a regular linear model (using `lm` from package `stats`):
 
 ``` r
+#Creating a linear model:
 linReg = lm(m,d)
+#Predicting the repsonse using linear model:
+linRegPredict = predict(linReg, d2)
 plot(linReg, which=c(1,2))
 ```
 
 ![](README_files/figure-markdown_github/lm-1.png)![](README_files/figure-markdown_github/lm-2.png)
+
+``` r
+#Comparing blm vs lm predictions:
+blmVSlm = lm(linRegPredict ~ myPredict$Prediction)
+summary(blmVSlm)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = linRegPredict ~ myPredict$Prediction)
+    ## 
+    ## Residuals:
+    ##        Min         1Q     Median         3Q        Max 
+    ## -0.0008829 -0.0002448 -0.0000326  0.0002484  0.0007800 
+    ## 
+    ## Coefficients:
+    ##                        Estimate Std. Error   t value Pr(>|t|)    
+    ## (Intercept)          -1.336e-04  1.043e-04    -1.281    0.217    
+    ## myPredict$Prediction  1.010e+00  9.259e-05 10906.395   <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.0004402 on 18 degrees of freedom
+    ## Multiple R-squared:      1,  Adjusted R-squared:      1 
+    ## F-statistic: 1.189e+08 on 1 and 18 DF,  p-value: < 2.2e-16
+
+``` r
+plot(linRegPredict, myPredict$Prediction, main="blm vs lm predictions", xlab="lm predictions", ylab="blm predictions")
+abline(a=blmVSlm$coefficients[1], b=blmVSlm$coefficients[2], col="red")
+```
+
+![](README_files/figure-markdown_github/lm-3.png)
+
+``` r
+#compare residuals:
+blmRes = residuals(myBlm)
+lmRes = linReg$residuals
+
+resCompare = lm(abs(lmRes) ~ abs(blmRes[,1]))
+summary(resCompare)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = abs(lmRes) ~ abs(blmRes[, 1]))
+    ## 
+    ## Residuals:
+    ##       Min        1Q    Median        3Q       Max 
+    ## -0.040285 -0.007424  0.000134  0.006555  0.030624 
+    ## 
+    ## Coefficients:
+    ##                   Estimate Std. Error  t value Pr(>|t|)    
+    ## (Intercept)      2.647e-05  7.835e-04    0.034    0.973    
+    ## abs(blmRes[, 1]) 1.000e+00  1.559e-04 6414.271   <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.01047 on 498 degrees of freedom
+    ## Multiple R-squared:      1,  Adjusted R-squared:      1 
+    ## F-statistic: 4.114e+07 on 1 and 498 DF,  p-value: < 2.2e-16
+
+``` r
+#Plotting the absolute residuals:
+plot(abs(lmRes), abs(blmRes[,1]), main="Comparison of residuals from blm and lm", xlab="Residuals from lm", ylab="Residuals from blm")
+abline(a=resCompare$coefficients[1], resCompare$coefficients[2], col="red")
+```
+
+![](README_files/figure-markdown_github/lm-4.png)
+
+This shows that the two types of linear regressions are highly correlated (with a slope very close to 1 and and intercept not significantly different from 0) for a data set of this size.

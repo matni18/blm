@@ -17,12 +17,16 @@ library(MASS)
 
 This packages was built for the class "Datascience II - Software Development and Testing" at Aarhus University, January 2017. It implements methods to construct ´blm´ objects, calculating posterior distributions and predicting responses from data.
 
-The definition of a linear model is any model that takes on the form 
-$$Y=w_0+\sum_{i=1}^nw_if(x_i)$$ 
+The definition of a linear model is any model that takes on the form
+
+![equation](http://www.sciweavers.org/tex2img.php?eq=Y%3Dw_0%2B%5Csum_%7Bi%3D1%7D%5Enw_if%28x_i%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+
 for random variables $x_i \in [1;n]$ where $w_i$ respresents the weight associated with the term $f(x_i)$. In general, the function $f(x_i)$ can be any function, but this package only deals with cases where $f(x_i)$ is a linear function. It is also assumed that the data is normally distributed.
 
-The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, $\alpha$. This will output a covariance matrix of the form 
-$$\sigma_{ij}=\begin{cases}1/\alpha,&\text{if i=j}\\0,&\text{otherwise}\end{cases}$$
+The linear model must be built using a training dataset that contains one or more explanatory variables and a response variable. The `blm` constructor requires a prior distribution of weights (i.e. their mean and their variance). This can be any distribution, but the `blm` package provides a function `make_prior` that can construct this for you, based on a given prior precision, $\alpha$. This will output a covariance matrix of the form
+
+![equation](http://www.sciweavers.org/tex2img.php?eq=%5Csigma_%7Bij%7D%3D%5Cbegin%7Bcases%7D1%2F%5Calpha%2C%26%5Ctext%7Bif%20i%3Dj%7D%5C%5C0%2C%26%5Ctext%7Botherwise%7D%5Cend%7Bcases%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+
 and a mean of 0 for all $w_i$.
 
 Given a model, a prior distribution, a posterior precision $\beta$, and some data, `blm` then calculates a posterior distribution of the weights. This is a normal distribution with $w_i \sim N(m_{x,y},\sigma_{x,y})$ where 
@@ -64,20 +68,42 @@ Now, we can use the bayesian linear model to predict the response for new data:
 ```{r newData}
 #New data:
 set.seed(2)
-d2 = data.frame(x=rnorm(5), z=rnorm(5))
+d2 = data.frame(x=rnorm(20), z=rnorm(20))
 d2
 
 #Predict response variables for new data using the blm:
-predict(myBlm, d2)
+myPredict = predict(myBlm, d2)
 
 ```
 
 We can compare these results with a regular linear model (using `lm` from package `stats`):
 
 ```{r lm}
+#Creating a linear model:
 linReg = lm(m,d)
+#Predicting the repsonse using linear model:
+linRegPredict = predict(linReg, d2)
 plot(linReg, which=c(1,2))
+
+#Comparing blm vs lm predictions:
+blmVSlm = lm(linRegPredict ~ myPredict$Prediction)
+summary(blmVSlm)
+plot(linRegPredict, myPredict$Prediction, main="blm vs lm predictions", xlab="lm predictions", ylab="blm predictions")
+abline(a=blmVSlm$coefficients[1], b=blmVSlm$coefficients[2], col="red")
+
+#compare residuals:
+blmRes = residuals(myBlm)
+lmRes = linReg$residuals
+
+resCompare = lm(abs(lmRes) ~ abs(blmRes[,1]))
+summary(resCompare)
+
+#Plotting the absolute residuals:
+plot(abs(lmRes), abs(blmRes[,1]), main="Comparison of residuals from blm and lm", xlab="Residuals from lm", ylab="Residuals from blm")
+abline(a=resCompare$coefficients[1], resCompare$coefficients[2], col="red")
 ```
+
+This shows that the two types of linear regressions are highly correlated (with a slope very close to 1 and and intercept not significantly different from 0) for a data set of this size.
 
 
 
